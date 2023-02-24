@@ -1,5 +1,5 @@
 # PROJET3A :Modélisation d'une rupture de digue
-### Ce dépôt de code correspond à une partie des codes utilisés et modifiés lors de notre projet. Le code de calcul BBAMR utilisé pour la modélisation de la rupture de la digue n'est pas disponible dans ce dépôt.
+#### Ce dépôt de code correspond à une partie des codes utilisés et modifiés lors de notre projet. Le code de calcul BBAMR utilisé pour la modélisation de la rupture de la digue n'est pas disponible dans ce dépôt.
 
 
 La modélisation de la rupture de digue est un domaine important pour la prévention
