@@ -1,6 +1,20 @@
 # PROJET3A :Modélisation d'une rupture de digue
 #### Ce dépôt de code correspond à une partie des codes utilisés et modifiés lors de notre projet. Le code de calcul BBAMR utilisé pour la modélisation de la rupture de la digue n'est pas disponible dans ce dépôt.
 
+### amr.f90
+Cette partie de code décrit la modélisation de l'érosion de la digue dans le cas du modèle de Saint-Venant.
+
+### bbamrSV.inp
+Fichier d'entrée pour le modèle de Saint-Venant.
+
+### bbamrBIF.inp
+Fichier d'entrée pour le modèle d'Euler bi-fluide.
+
+### fct_mvsol.f90
+Programme permettant la modélisation de l'érosion de la digue pour le modèle d'Euler bi-fluide.
+
+
+## Introduction du rapport de projet
 
 La modélisation de la rupture de digue est un domaine important pour la prévention
 et la gestion des risques liés aux inondations. Les modèles numériques sont des
