@@ -1,4 +1,6 @@
 # PROJET3A :Modélisation d'une rupture de digue
+### Ce dépôt de code correspond à une partie des codes utilisés et modifiés lors de notre projet. Le code de calcul BBAMR utilisé pour la modélisation de la rupture de la digue n'est pas disponible dans ce dépôt.
+
 
 La modélisation de la rupture de digue est un domaine important pour la prévention
 et la gestion des risques liés aux inondations. Les modèles numériques sont des
@@ -20,5 +22,3 @@ les deux modèles utilisés, ensuite, nous expliquons la mise en place des calcu
 nous apportons une attention particulière à la modélisation de la digue, de sa brèche
 et de l’érosion de celle-ci. Enfin, nous analysons les résultats obtenus et tentons de
 tirer des conclusions sur les deux modèles utilisés.
-
-Ce dépôt de code correspond à une partie des codes utilisés et modifiés lors de notre projet. Le code de calcul BBAMR utilisé pour la modélisation de la rupture de la digue n'est pas disponible dans ce dépôt.
