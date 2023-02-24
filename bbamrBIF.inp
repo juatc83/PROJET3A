@@ -1,0 +1,222 @@
+!-----------------------------------------------------------------------
+! Data file in EOLENS format
+! Each block of data is characterized in the first line by a header (4 characters)
+! then a code (1 integer) and an argument (1 integer)
+! format A4,2I5
+! PHYS MESH INIT COND NUME
+!-----------------------------------------------------------------------
+
+!-----------------------------------------------------------------------
+! Reading physical parameters 
+! Header PHYS
+! 1 keyword (4 characters) and a real
+! for now we have the same values for all domains
+!-----------------------------------------------------------------------
+! MODE : physical model
+!        0/ Euler
+!        1/ Navier-Stokes
+!        2/ K-epsilon        
+!        3/ isothermal two-phases
+!        4/ two-phases 1 energy 
+!        5/ two-phases 2 energies
+!        6/ granular
+!       10/ Shallow water                             (default 0.)
+! GPES : Gravity                                      (default 9.81)
+! GAMA : Parameter gama of the pressure law           (default 1.1)
+! PINF : Parameter Pinf of the pressure law           (default -0.9996363636D5)
+! VIMU : Dynamical viscosity mu          (Pa s)       (default -0.890d-3)
+! ZETA : Volumic viscosity zeta          (Pa s)       (default 0.)
+! CSVC : Specific heat at constant volume (J/kg/K)    (default 4180.)
+! TREF : Temperature of reference                     (default 299.9999130d0)
+! CONT : Thermal conductivity (W/m K)                 (default 0.6071)
+! CONV : Computation of convective terms 0/no 1/yes   (default 1.)
+! PREF : isothermal pressure of reference             (default 1.d5)
+! CSOA : Air sound velocity (isothermal)              (default 20.)
+! CSOW : Water sound velocity (isothermal)            (default 20.)
+! REFA : Isothermal density reference for Air         (default 1.)
+! REFW : Isothermal density reference for Water       (default 1000.)
+! PIFA : Parameter pinf for air                       (default 0.)
+! PIFW : Parameter pinf for water                     (default 0.)
+! GMAA : Parameter gamma for air                      (default 1.4)
+! GMAW : Parameter gamma for water                    (default 1.1)
+! CONS : non-conservative computation 0/cons 1/non-cons (default 0)
+! SHAR : isothermal interface sharpening parameter 
+!        recommended value 0.1                        (defaut 0)
+!-----------------------------------------------------------------------
+PHYS 0
+MODE 3.
+CONS 1
+SHAR 0.001
+!-----------------------------------------------------------------------
+! Reading the mesh
+! Header  MESH 
+! code 1 -> creation of a mesh
+!           argument: 0 type "1D shock tube"
+! next line: xmin,xmax,ymin,ymax,zmin,zmax
+! next line: nb_dom,nx
+!
+!           argument: 1 type "2d box"
+! next line: xmin,xmax,ymin,ymax,zmin,zmax
+! next line: nb_dom,nx,ny,iaxi
+!
+!           argument: 2 type "3d box"
+! next line: xmin,xmax,ymin,ymax,zmin,zmax
+! next line: nx,ny,nz
+!
+! code 2 -> Reading an ascii file format Fluent 6
+!           argument: Dimension of the problem
+!                     0/axi, 1/1D, 2/2D, 3/3D
+! next line: file name
+!-----------------------------------------------------------------------
+MESH    1    2
+0. 5. 0. 3. 0. 2.
+15 12 10
+!-----------------------------------------------------------------------
+! Lecture des conditions initiales (Si icode_MESH>0)
+! Entete INIT 
+! code 0 -> Definition pour un tube a chocs
+!           variables primitives a gauche rho,u,p si x<0 (3 reels)
+!           variables primitives a droite rho,u,p si x>0 (3 reels)
+!           argument: 0
+! code 1 -> Definition constante par domaine
+!           argument: nombre de domaines
+!           pour chaque domaine, on ecrit sur une ligne
+!           nvar valeurs (variables primitives)
+! code 2 -> Lecture sur un fichier , nvar valeurs par cellule
+!           argument: 0
+! code 3 -> Definition par une fonction utilisateur 
+!           (routine ../uti/fct_uti.f90)
+!           argument: Numero de la fonction
+! code 4 -> Definition pour le BB-AMR
+!           argument: Numero de la fonction utilisateur (si <0)
+!                     (subroutine ../uti/amr_ini.f90)
+!                     ou nombre de zones si argument >0�
+!           puis, si argument >0,�pour chaque zone
+!           xmin,xmax,ymin,ymax,zmin,zmax
+!           nvar valeurs (variables primitives)
+!-----------------------------------------------------------------------
+INIT    4    3
+-1. 5.1 -1. 3.1 0. 2.
+1. 0. 0. 0.  1.e5 0.
+-1. 5.1 -1. 0.5 0. 2.
+1000. 0. 0. 0. 1.e5 0.
+-1. 1.4 -1. 2.2 0. 2.
+1000. 0.2 0. 0.  1.e5 0.
+!-----------------------------------------------------------------------
+! Reading boundary condition (if icode_MESH>0)
+! (maximum 10 for the moment)
+! Header COND 
+!
+! code 0 -> Description in the case  "shock tube" : Nothing
+!
+! code 1 -> Description in the case  "2d box" (at least 1 line per type) :
+!           kind of boundary condition in xmin, xmax, ymin, ymax
+!
+! code 2 -> Description in the case  "3d box" (at least 1 line per type) :
+!           kind of boundary condition in xmin, xmax, ymin, ymax, zmin,zmax
+!
+! code 3 -> Definition per zone for  Fluent mesh
+!           argument: number of zones defining a boundary condition
+!           number of zone, kind of boundary condition 
+!
+! kind of boundary condition:
+! 0 outlet (we copy)
+! 1 miror
+! 2 wall (in the case of vicous model)
+! 3 Dirichlet condition (if 1.e20 then copy), then next line nvar values
+! 4 user's function , then next line function number
+! 5 wall law (for turbulent flow)
+! 6 Periodicity
+! (the second time, 3 real values defining the translation vector are added)
+! 7 Dirichlet condition on conservative variables  (if 1.e20 then copy),
+!   then next line nvar values
+! 999 Non used
+!-----------------------------------------------------------------------
+COND    2    0
+1
+0
+1
+1
+1
+1
+!-----------------------------------------------------------------------
+! Reading mesh parameters per Block AMR (BB-AMR)
+! in the case of BB-AMR, the block mesh is represented by th domain � 0 �.
+! Header BLOC 
+!
+! code 0 -> default value
+!
+! 1 keyword (4 characters) and a real
+! NBDS : number of domains                         (default 001.)
+! NRMA : Maximum refinement level                  (default 000.)
+! VCDE : Mesh coarsening parameter          0<..<1 (default 0.002)
+! VCRA : Mesh refinement parameter          0<..<1 (default 0.02)
+! TFIN : Final time of simulation 
+! CCBL : CFL Condition on blocks before remeshing 
+! FDRA : Function defining the mesh refinement to be applied 
+! NZRA : Number of zones where initial blocks are refined (default 1.)
+!        then for each zone
+!        nrb,nx,ny,nz,xmin,xmax,ymin,ymax,zmin,zmax
+!-----------------------------------------------------------------------
+BLOC 0
+NBDS 32
+NRMA 3
+VCRA 0.99
+VCDE 0.95
+NZRA 4
+0 1 1 1 -1. 5.1 -1. 3.1 -1. 3.
+3 1 1 1 -1. 1.12 1.9 2.1 -1. 3.
+3 1 1 1 1.  1.6 0. 2.6 -1. 3.
+0 1 1 1 -1. .9 -1. 1.9 -1. 3.
+!-----------------------------------------------------------------------
+! Lecture des parametres de definition dobstacles rigides
+! Entete OBST 
+!
+! code 0 -> valeur par defaut
+!           argument: nombre dobstacles
+! 1 ligne par obstacle: nom de fichier, densite, type de mouvement
+! (  -1: fixe, 0: libre, >0 : numero de la fonction imposant le mouvement)
+!
+!-----------------------------------------------------------------------
+OBST    0    3
+digueLoin.obj 500. 1
+digueMilieu2.obj 500. 2
+digueProche.obj 500. 3 
+!-----------------------------------------------------------------------
+! Reading numerical parameter 
+! Header  NUME
+! 1 keyword (4 characters) then a real
+! code 0 -> default value
+!
+! TMIN : lower bound of computation time             (default 0.)
+! TMAX : upper bound of computation time             (default 0.)
+! CCFL : cfl condition                               (default 0.9)
+! NPAS : time step number                            (default 0.)
+! FLUX : kind of numerical flux
+!        0/rusanov
+!        1/godunov
+!        2/ Flux centered
+!        3/ VF-Roe                                   (default 1.)
+! PRET : ordre of time discretization 1 ou 2         (defaut 1.)
+! PREE : ordre of space discretization 1 ou 2        (defaut 1.)
+! LIMI : kind of limiter  0/Barth, 1/Cartesian       (default 0.)
+! PART : Number of domains to be created (without AMR!!) (default 0.)
+! SAVE : kind of backup, three-digit number          (default 001.)
+!        hundred : shock tube backup 0/no 1/yes 
+!        decade  : MEDIT backup      0/no 1/yes 
+!        unit    : binary backup     0/no 1/yes 
+! SOND : number of probe  < 10                      (defaut 000.)
+!        then coordinates x,y,z of the probe (1 probe per line)
+! METH : time integration method
+!        1/ RK1 ou RK
+!        2/ Adams Bashforth
+!        3/ Adams Bashforth pas de temps local       (default 001.)
+!-----------------------------------------------------------------------
+NUME 0 
+TMAX 0.015
+CCFL .7
+PREE 2.
+PRET 2.
+METH 1
+SAVE 01.
+
