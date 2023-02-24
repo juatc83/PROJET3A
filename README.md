@@ -1,5 +1,5 @@
 # PROJET3A :Modélisation d'une rupture de digue
-#### Ce dépôt de code correspond à une partie des codes utilisés et modifiés lors de notre projet. Le code de calcul BBAMR utilisé pour la modélisation de la rupture de la digue n'est pas disponible dans ce dépôt.
+#### /!\ Ce dépôt de code correspond à une partie des codes utilisés et modifiés lors de notre projet. Le code de calcul BBAMR utilisé pour la modélisation de la rupture de la digue n'est pas disponible dans ce dépôt. /!\
 
 ### amr.f90
 Cette partie de code décrit la modélisation de l'érosion de la digue dans le cas du modèle de Saint-Venant.
