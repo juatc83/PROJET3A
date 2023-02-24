@@ -4,11 +4,11 @@
 ### amr.f90
 Cette partie de code décrit la modélisation de l'érosion de la digue dans le cas du modèle de Saint-Venant.
 
-### bbamrSV.inp
-Fichier d'entrée pour le modèle de Saint-Venant.
-
 ### bbamrBIF.inp
 Fichier d'entrée pour le modèle d'Euler bi-fluide.
+
+### bbamrSV.inp
+Fichier d'entrée pour le modèle de Saint-Venant.
 
 ### fct_mvsol.f90
 Programme permettant la modélisation de l'érosion de la digue pour le modèle d'Euler bi-fluide.
